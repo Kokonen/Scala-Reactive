@@ -21,6 +21,7 @@ object Messages {
   case class Search(searchPhrase: String)
 
   case class RegisterAuction(title: String)
+  case class UnregisterAuction(title: String)
 
   case object AuctionSold
   case object BidTimerExpired
@@ -28,4 +29,6 @@ object Messages {
   case object Relist
   case object AuctionWon
   case object AlreadySold
+
+  case object Init
 }

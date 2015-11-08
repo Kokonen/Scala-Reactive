@@ -16,9 +16,12 @@ class AuctionSearch extends Actor {
     case RegisterAuction(auctionTitle) => {
       context become receive(searchMap + (auctionTitle -> sender));
     }
+    case UnregisterAuction(auctionTitle) => {
+      context become receive(searchMap - auctionTitle);
+    }
   }
 
-  def receive = receive(Map())
+  override def receive = receive(Map())
 
   def search(searchPhrase: String, searchMap: Map[String, ActorRef]): List[ActorRef] = {
     searchMap.filterKeys { title => title.contains(searchPhrase) }.values.toList
