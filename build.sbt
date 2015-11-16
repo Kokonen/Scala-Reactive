@@ -1,4 +1,4 @@
-name := """Zadaniev1"""
+name := """Bank"""
 
 version := "1.0"
 
@@ -10,4 +10,5 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "2.2.4" % "test" withSources() withJavadoc(),
   "com.typesafe.akka" %% "akka-persistence" % "2.4.0" withSources() withJavadoc(),
   "org.iq80.leveldb"            % "leveldb"          % "0.7" withSources() withJavadoc(),
-  "org.fusesource.leveldbjni"   % "leveldbjni-all"   % "1.8" withSources() withJavadoc())
+  "org.fusesource.leveldbjni"   % "leveldbjni-all"   % "1.8" withSources() withJavadoc(),
+  "com.geteventstore" %% "akka-persistence-eventstore" % "2.1.0")

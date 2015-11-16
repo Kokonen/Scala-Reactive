@@ -7,7 +7,7 @@ import scala.concurrent.duration.`package`.DurationInt
 import bank.Messages._
 
 object Seller {
-    val BID_TIME: FiniteDuration = 10 seconds
+    val BID_TIME: FiniteDuration = 20 seconds
 }
 
 
