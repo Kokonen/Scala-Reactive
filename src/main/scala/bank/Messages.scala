@@ -22,7 +22,7 @@ object Messages {
 
   case class RegisterAuction(title: String)
   case class UnregisterAuction(title: String)
-  
+
   case class Notify(title: String, currentWinner: ActorPath, currentPrice: Double)
 
   case object AuctionSold
@@ -33,4 +33,6 @@ object Messages {
   case object AlreadySold
 
   case object Init
+
+  case object NotifyResponse
 }
