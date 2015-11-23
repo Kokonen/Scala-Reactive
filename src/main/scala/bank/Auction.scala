@@ -29,6 +29,7 @@ class Auction(val title: String, val decription: String, val auctionDuration: Fi
 
   def created(currentPrice: Double): Receive = LoggingReceive {
     case Bid(bidValue) if (bidValue > currentPrice) => {
+      context.actorSelection("/user/" + Notifier.NOTIFIER_SEARCH_NAME) ! Notify(title, sender.path, bidValue)
       persist(BidEvent(bidValue, sender.path)) {
         evn =>
           updateState(evn)
@@ -50,6 +51,7 @@ class Auction(val title: String, val decription: String, val auctionDuration: Fi
   def activated(currentWinner: ActorPath, currentPrice: Double): Receive = LoggingReceive {
     case Bid(bidValue) if (bidValue > currentPrice) => {
       context.system.actorSelection(currentWinner) ! Outbidded(bidValue)
+      context.actorSelection("/user/" + Notifier.NOTIFIER_SEARCH_NAME) ! Notify(title, currentWinner, bidValue)
       persist(BidEvent(bidValue, sender.path)) {
         evn => updateState(evn)
       }

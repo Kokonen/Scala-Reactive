@@ -1,12 +1,17 @@
 package bank
+
+import com.typesafe.config._
 import akka.actor._
 import akka.actor.Props
 import scala.concurrent.duration.`package`.DurationInt
 
 object BankApp extends App {
-  val system = ActorSystem("BankApp")
+  
+  val config = ConfigFactory.load()
+  val system = ActorSystem("BankApp", config.getConfig("BankApp").withFallback(config))
 
   system.actorOf(Props(classOf[AuctionSearch]), AuctionSearch.AUCTION_SEARCH_NAME);
+  system.actorOf(Props(classOf[Notifier]), Notifier.NOTIFIER_SEARCH_NAME);
 
   var searchPhrases: List[String] = List("Audi", "manual", "silver")
   var auctionsTitles: List[String] = List("Audi A6 diesel manual", "Skoda fabia manual", "Daewoo tico silver", "Notebook asus silver")
