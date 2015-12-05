@@ -15,11 +15,20 @@ class Seller(val titles: List[String]) extends Actor {
   import Seller._
   var deletedAuctionsCount: Int = 0;
   var auctions: List[ActorRef] = List()
+  
+  var auctionCreated = 0 
+  
   def receive = LoggingReceive {
     case AuctionSold =>
     case AuctionDeleted => {
       deletedAuctionsCount += 1
       stopIfEnd()
+    }
+    case AuctionCreated => {
+      auctionCreated += 1
+      if (auctionCreated == titles.size) {
+        context.parent ! AuctionsCreated
+      }
     }
   }
 

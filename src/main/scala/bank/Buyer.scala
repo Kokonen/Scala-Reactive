@@ -23,8 +23,8 @@ class Buyer(var searchTitles: List[String], val maximumBid: Double) extends Acto
       searchResults.foreach {
         auction =>
           {
-            if(!auctions.contains(auction)){
-              auctions = auction::auctions
+            if (!auctions.contains(auction)) {
+              auctions = auction :: auctions
               auction ! Bid(10)
             }
           }
@@ -53,7 +53,7 @@ class Buyer(var searchTitles: List[String], val maximumBid: Double) extends Acto
   }
 
   def startBidding = {
-    var auctionSearch: ActorSelection = context.actorSelection("/user/"+ AuctionSearch.AUCTION_SEARCH_NAME)
+    var auctionSearch: ActorSelection = context.actorSelection("/user/" + MasterSearch.MASTER_SEARCH_NAME)
     searchTitles.foreach { title => auctionSearch ! Search(title) }
   }
 

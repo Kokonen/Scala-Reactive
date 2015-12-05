@@ -4,10 +4,6 @@ import akka.actor._
 import akka.event.LoggingReceive
 import bank.Messages._
 
-object AuctionSearch {
-  val AUCTION_SEARCH_NAME = "AuctionSearch"
-}
-
 class AuctionSearch extends Actor {
 
   def receive(searchMap: Map[String, ActorRef]): Receive = LoggingReceive {

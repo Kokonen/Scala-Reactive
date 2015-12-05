@@ -20,7 +20,7 @@ class AuctionTest extends TestKit(ActorSystem("AuctionHouseTest"))
     override def receive = {
       case x => auctionSearchTestProbe.ref forward x
     }
-  }), AuctionSearch.AUCTION_SEARCH_NAME)
+  }), MasterSearch.MASTER_SEARCH_NAME)
 
   val underTest = TestActorRef(Props(classOf[Auction], AUCTION_TEST_NAME, AUCTION_TEST_NAME, Seller.BID_TIME, 0.0), parentTestProbe.ref, AUCTION_TEST_NAME)
 
@@ -54,7 +54,7 @@ class AuctionTest extends TestKit(ActorSystem("AuctionHouseTest"))
       parentTestProbe.expectMsg(Seller.BID_TIME + (1 second), AuctionSold)
       parentTestProbe.expectMsg(Seller.BID_TIME + (1 second) + Auction.DELETE_TIME, AuctionDeleted)
     }
-    
+
     "tell parent that not sold auction was deleted" in {
       parentTestProbe.expectMsg(Seller.BID_TIME + (1 second) + Auction.DELETE_TIME, AuctionDeleted)
     }

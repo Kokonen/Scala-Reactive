@@ -6,11 +6,12 @@ import akka.actor.Props
 import scala.concurrent.duration.`package`.DurationInt
 
 object BankApp extends App {
-  
+  val searchWorkersCount = 10
+
   val config = ConfigFactory.load()
   val system = ActorSystem("BankApp", config.getConfig("BankApp").withFallback(config))
 
-  system.actorOf(Props(classOf[AuctionSearch]), AuctionSearch.AUCTION_SEARCH_NAME);
+  system.actorOf(Props(classOf[MasterSearch], searchWorkersCount), MasterSearch.MASTER_SEARCH_NAME);
   system.actorOf(Props(classOf[Notifier]), Notifier.NOTIFIER_SEARCH_NAME);
 
   var searchPhrases: List[String] = List("Audi", "manual", "silver")

@@ -35,4 +35,7 @@ object Messages {
   case object Init
 
   case object NotifyResponse
+
+  case object AuctionCreated
+  case object AuctionsCreated
 }

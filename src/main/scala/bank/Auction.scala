@@ -8,7 +8,10 @@ import scala.concurrent.duration.`package`.DurationInt
 import bank.Messages._
 import akka.persistence.PersistentActor
 import akka.persistence.RecoveryCompleted
+import akka.persistence.Recovery
+
 import java.util.Calendar
+
 object Auction {
   val DELETE_TIME: FiniteDuration = 10 seconds
 
@@ -24,6 +27,7 @@ object Auction {
   case object Ignored extends BankEvent
 }
 class Auction(val title: String, val decription: String, val auctionDuration: FiniteDuration, val initialPrice: Double = 0.0) extends PersistentActor {
+  override val recovery = Recovery.none;
   import context._
   import Auction._
 
@@ -110,7 +114,7 @@ class Auction(val title: String, val decription: String, val auctionDuration: Fi
   override def receiveCommand: Receive = LoggingReceive {
     case Init =>
       persist(Registered(title)) {
-        evn => updateState(evn)
+        evn => updateState(evn); context.parent ! AuctionCreated
       }
       persist(EndTime(currentTime + auctionDuration)) {
         evn => updateState(evn)
@@ -125,7 +129,7 @@ class Auction(val title: String, val decription: String, val auctionDuration: Fi
       case BidEvent(prize: Double, winner: ActorPath) => context become activated(winner, prize)
       case EndAuction                                 => context become sold
       case DeleteAuction =>
-        context.actorSelection("/user/" + AuctionSearch.AUCTION_SEARCH_NAME) ! UnregisterAuction(title)
+        context.actorSelection("/user/" + MasterSearch.MASTER_SEARCH_NAME) ! UnregisterAuction(title)
         context.stop(self)
       case DeleteTime(time: FiniteDuration) => {
         if (time - currentTime > Duration(0, MILLISECONDS)) {
@@ -142,7 +146,7 @@ class Auction(val title: String, val decription: String, val auctionDuration: Fi
         }
       }
       case Created(initialPrice: Double) => context become created(initialPrice)
-      case Registered(title)             => context.actorSelection("/user/" + AuctionSearch.AUCTION_SEARCH_NAME) ! RegisterAuction(title)
+      case Registered(title)             => context.actorSelection("/user/" + MasterSearch.MASTER_SEARCH_NAME) ! RegisterAuction(title)
       case Ignored                       => context become ignored
     }
   }
